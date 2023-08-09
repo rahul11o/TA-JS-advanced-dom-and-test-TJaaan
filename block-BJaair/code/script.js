@@ -1,22 +1,57 @@
-let card_container = document.querySelector(".card_container");
+let form = document.querySelector(".form");
+let root = document.querySelector(".root");
 
-function handleSubmit(event) {
-  console.log("rahul");
+let cardInfo = JSON.parse(localStorage.getItem("cards")) ?? [];
+// localStorage.clear();
+form.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  let title = document.getElementById("title").value;
-  let category = document.getElementById("category").value;
+  let title = event.target.title.value;
+  let category = event.target.category.value;
+  cardInfo.push({ title, category });
+  localStorage.setItem("cards", JSON.stringify(cardInfo));
+  createUI(cardInfo, root);
+});
 
-  const card = document.createElement("div");
-  card.classList.add("cards");
-  let card_title = document.createElement("input");
-  card_title.value = title;
-  card_title.classList.add("title");
-  let card_category = document.createElement("input");
-  card_category.value = category;
-  card.append(card_title, card_category);
-  card_container.append(card);
+function handleEdit(event, info, id, label) {
+  let elm = event.target;
+  let inputElem = document.createElement("input");
+  inputElem.value = info;
+  inputElem.addEventListener("keyup", (e) => {
+    if (e.keyCode === 13) {
+      cardInfo[id][label] = e.target.value;
+      createUI();
+      localStorage.setItem("cards", JSON.stringify(cardInfo));
+    }
+  });
+  inputElem.addEventListener("blur", (e) => {
+    cardInfo[id][label] = e.target.value;
+    createUI();
+    localStorage.setItem("cards", JSON.stringify(cardInfo));
+  });
+  let parent = event.target.parentElement;
+  parent.replaceChild(inputElem, elm);
 }
 
-const form = document.querySelector(".form");
-form.addEventListener("submit", handleSubmit);
+function createUI(data = cardInfo, rootElem = root) {
+  root.innerHTML = "";
+  let fragment = new DocumentFragment();
+  data.forEach(function (element, index) {
+    let li = document.createElement("li");
+    let p = document.createElement("p");
+    p.innerText = element.category;
+    p.addEventListener("dblclick", (event) => {
+      handleEdit(event, element.category, index, "category");
+    });
+    let h2 = document.createElement("h2");
+    h2.innerText = element.title;
+    p.innerText = element.category;
+    h2.addEventListener("dblclick", (event) => {
+      handleEdit(event, element.title, index, "title");
+    });
+    li.append(p, h2);
+    fragment.appendChild(li);
+  });
+  rootElem.appendChild(fragment);
+}
+createUI(cardInfo, root);

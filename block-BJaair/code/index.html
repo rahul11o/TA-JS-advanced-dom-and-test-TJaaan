@@ -3,34 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notice board</title>
+    <title>Notice Board</title>
     <link rel="stylesheet" href="stylesheet/style.css" />
   </head>
   <body>
     <header>
-      <h1>User Cards</h1>
+      <h1>User Card</h1>
     </header>
     <main>
-      <section class="primary_section">
-        <div class="card_container"></div>
-        <form class="form">
-          <input
-            type="text"
-            placeholder="Enter the title"
-            name="title"
-            id="title"
-          />
-          <input
-            type="text"
-            placeholder="Enter the category"
-            name="category"
-            id="category"
-          />
-          <input type="submit" value="Add new items" />
+      <div class="container">
+        <ul class="root"></ul>
+        <form action="" class="form">
+          <input type="text" name="title" placeholder="Title" required />
+          <input type="text" name="category" placeholder="Category" required />
+          <input type="submit" value="Add new item" />
         </form>
-      </section>
+      </div>
     </main>
-
     <script src="script.js"></script>
   </body>
 </html>
